@@ -1,3 +1,7 @@
+<p align="center">
+<img width="354" alt="CB" src="https://github.com/user-attachments/assets/e2791402-5a78-46c5-a51d-bc64cc0f728d">
+</p>
+
 # Overview
 This code was developed for the Crystal Ball (CB) model, detailed here: https://arxiv.org/abs/2410.04311. The data reported in this paper can be found in Data.zip. CB is an N-body code for simulating the dynamics of lattice structures composed of particles confined to the surface of a sphere which interact only through Coulomb coupling. The code has two primary functions: to generate lattices, and to study the dynamics of these lattices once formed. For $N$ particles of the same species, we are interested in the configuration
 on the sphere which minimizes the Coulomb potential. This is known as the Thomson Problem (see here: https://en.wikipedia.org/wiki/Thomson_problem). Typically, global optimization methods are used to identify global minima candidates. In our case, we treat the problem as a dynamcis problem and push
