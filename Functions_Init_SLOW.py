@@ -515,10 +515,6 @@ def initSingle(N,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,writ
     initLatticeAnalysis(particles,timeSeries,N,NN,n,r,data_dir,particleIdx,log,save,NMC) # Analysis plots
     end = time.time() # Save end time
     #print(f'Figures generated in {end - start} seconds.\n') # Print time to create figures
-        
-def initMC_Linear(N,Nt,k,r,m,nu,dt,max_dt,C,NMC,seed,write,save): # Init NMC lattices for constant N
-    for i in np.linspace(1,NMC,NMC).astype('int'):
-        initSingle(N,Nt,k,r,m,nu,dt,i,seed*i,write,save)
 
 def initMC_Multi(N,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log): # Init NMC lattices for constant N in parallel
     print(f'Code started on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}.\n')
