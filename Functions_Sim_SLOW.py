@@ -209,8 +209,8 @@ def plotEnergyAll(particles,Nt,time,N,Nrm,NMC,r,m,data_dir,log=False,save=False)
     ax[1,0].grid()
     
     ax[1,1].set_xlabel('Time (s)')
-    ax[1,1].set_ylabel('Energy (eV)')
-    ax[1,1].set_title('Total System Energy',pad=18)
+    ax[1,1].set_ylabel(r'$\frac{E_{0} - E(t)}{E_{0}}$')
+    ax[1,1].set_title(f'Total Energy Fluctuation\n'+r'Normalized by $E_{0}$',pad=18)
     ax[1,1].grid()
     
     ke = np.zeros([N,Nt+1]) # Kinetic energy array
@@ -227,7 +227,7 @@ def plotEnergyAll(particles,Nt,time,N,Nrm,NMC,r,m,data_dir,log=False,save=False)
     
     U = 0.5*np.sum(particles[:,:,9],axis=0) # Total potential energy of system
     E[:] += U # Add total potential to total kinetic
-    ax[1,1].plot(time,E) # Plot system total energy
+    ax[1,1].plot(time,(E[0] - E)/E[0]) # Plot system total energy
     
     if log:
         ax[0,0].set_yscale('log')
@@ -239,9 +239,9 @@ def plotEnergyAll(particles,Nt,time,N,Nrm,NMC,r,m,data_dir,log=False,save=False)
          
     if save:
         if log:
-            plt.savefig(f'{data_dir}/Output Sim/Lattice_{NMC}_N_{N+Nrm}_Nrm_{Nrm}_Elog.png',bbox_inches='tight',format='png')
+            plt.savefig(f'{data_dir}/Output Sim/Lattice_{NMC}_N_{N+Nrm}_Nrm_{Nrm}_Elog.png',bbox_inches='tight',format='png',dpi=600)
         else:
-            plt.savefig(f'{data_dir}/Output Sim/Lattice_{NMC}_N_{N+Nrm}_Nrm_{Nrm}_E.png',bbox_inches='tight',format='png')
+            plt.savefig(f'{data_dir}/Output Sim/Lattice_{NMC}_N_{N+Nrm}_Nrm_{Nrm}_E.png',bbox_inches='tight',format='png',dpi=600)
     else:
         plt.show()
     plt.close(fig)
