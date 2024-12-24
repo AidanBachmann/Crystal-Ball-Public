@@ -118,12 +118,12 @@ def plot_Un(Narr,Un): # Plot energy
     plt.figure(figsize=(12,10))
     plt.scatter(Narr,Un)
     plt.xlabel('Number of Particles')
-    plt.ylabel('Energy (Unitless)')
+    plt.ylabel('Energy')
     plt.title('Energy of Lattice as a Function of N')
     plt.grid()
     plt.show()
 
-def plot_a(Narr,a,err): # Plot energy
+def plot_a(Narr,a,err,dir,save=False): # Plot energy
     fig,ax = plt.subplots(1,2,figsize=(20,10))
 
     a *= 1e10 # Scale lengths to angstroms
@@ -143,12 +143,16 @@ def plot_a(Narr,a,err): # Plot energy
     ax[1].set_title('Percent Error Between Theory and Simulation')
     ax[1].grid()
 
-    plt.show()
+    if save:
+        plt.savefig(f'{dir}/Output Init/Lattice Constants.png',dpi=600)
+    else:
+        plt.show()
 
 # ---------- Main ----------
 
 data_dir = 'z_Data_1' # Specify data directory
 write = True # Toggle writing of potential values
+save = True # Save figures
 Narr = np.linspace(100,1000,10,dtype='int') # Array of N values
 
 NMC = 8 # Specify which Monte-Carlo simulation to grab
@@ -156,7 +160,7 @@ r = 25.5e-10 # Sphere radius to use for initialization
 
 Un,a,err = compute_all_Un(Narr,NMC,data_dir,r) # Compute lattice constants and potential energy
 plot_Un(Narr,Un) # Plot results
-plot_a(Narr,a,err)
+plot_a(Narr,a,err,data_dir,save)
 
 if write:
     write_Un(Narr,Un,data_dir) # Write potentials
