@@ -227,7 +227,7 @@ def plotEnergyAll(particles,Nt,time,N,Nrm,NMC,r,m,data_dir,log=False,save=False)
     
     U = 0.5*np.sum(particles[:,:,9],axis=0) # Total potential energy of system
     E[:] += U # Add total potential to total kinetic
-    ax[1,1].plot(time,(E[0] - E)/E[0]) # Plot system total energy
+    ax[1,1].plot(time,(E[0] - E)/E[0]) # Plot fluctuations in total system energy, normalized by initial value
     
     if log:
         ax[0,0].set_yscale('log')
