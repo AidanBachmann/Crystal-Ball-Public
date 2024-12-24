@@ -102,7 +102,7 @@ def plotAll(N,Nrm,Tmax_sim,Tmax_scaling,err,dir,plotScale=True,save=False): # Pl
     colors = plt.cm.hsv(np.linspace(0,1,len(N)+1)) # Create unique color for each particle
     plt.figure(figsize=(12,10))
     plt.title(r'$T(N,N_{rm})$ Curves of Constant $N$')
-    plt.xlabel(r'$N_{rm}$')
+    plt.xlabel(r'$N_{rm}$',fontsize=24)
     plt.ylabel('Energy (eV)')
     plt.xticks(Nrm)
     for i, c in zip(np.linspace(1,len(N),len(N),dtype='int'),colors):
@@ -113,7 +113,7 @@ def plotAll(N,Nrm,Tmax_sim,Tmax_scaling,err,dir,plotScale=True,save=False): # Pl
     plt.grid()
     plt.legend()
     if save:
-        plt.savefig(f'{dir}/N = {N}',bbox_inches='tight',dpi=600)
+        plt.savefig(f'{dir}/Scaling Data/Curves of Constant N',bbox_inches='tight',dpi=600)
     else:
         plt.show()
 
@@ -127,16 +127,17 @@ def plotFittingSurface(N_MESH,NRM_MESH,model,avg,err,dir,save=False):
     for i in np.arange(0,N_MESH.shape[0]):
         for j in np.arange(0,N_MESH.shape[1]):
             ax.plot([N_MESH[i,j], N_MESH[i,j]], [NRM_MESH[i,j], NRM_MESH[i,j]], [avg.T[i,j]+err.T[i,j], avg.T[i,j]-err.T[i,j]], marker="_")
-    ax.set_xlabel(r'$N$')
-    ax.set_ylabel(r'$N_{rm}$')
+    ax.set_xlabel(r'$N$',fontsize=24)
+    ax.set_ylabel(r'$N_{rm}$',fontsize=24)
     ax.set_zlabel(r'Energy (eV)')
     ax.set_title(r'$T(N,N_{rm})$ Scaling Surface')
     ax.xaxis.labelpad = 10
     ax.yaxis.labelpad = 10
-    ax.zaxis.labelpad = 10
+    ax.zaxis.labelpad = 15
+    ax.tick_params(axis='z',which='major',pad=8)
     ax.legend(loc=2,bbox_to_anchor=(0.1,0.85))
     if save:
-        plt.savefig(f'{dir}/Energy Scaling Surface',bbox_inches='tight',dpi=600)
+        plt.savefig(f'{dir}/Scaling Data/Energy Scaling Surface',bbox_inches='tight',dpi=600)
     else:
         plt.show()
 
