@@ -82,7 +82,7 @@ def computeAvgs(avg,err,Narr,numN,NMC,Nblocks,Nlines): # NEED TO FIX ***********
             avg[i,k] = np.average(data[i,:,k*Nblocks:(1+k)*Nblocks])
             err[i,k] = np.std(data[i,:,k*Nblocks:(1+k)*Nblocks])
     
-def plotSingle(Nrm,Tmax_sim,Tmax_scaling,err,N,save=False): # Plot single scaling
+def plotSingle(Nrm,Tmax_sim,Tmax_scaling,err,N,dir,save=False): # Plot single scaling
     plt.figure(figsize=(12,10))
     plt.rcParams.update({'font.size': 18})
     plt.scatter(Nrm,Tmax_sim,label='Simulation')
@@ -95,10 +95,10 @@ def plotSingle(Nrm,Tmax_sim,Tmax_scaling,err,N,save=False): # Plot single scalin
     plt.grid()
     plt.legend()
     if save:
-        plt.savefig(f'z_Data_1/N = {N}',bbox_inches='tight')
+        plt.savefig(f'{dir}/N = {N}',bbox_inches='tight',dpi=600)
     plt.show()
 
-def plotAll(N,Nrm,Tmax_sim,Tmax_scaling,err,plotScale=True,save=False): # Plot all scalings
+def plotAll(N,Nrm,Tmax_sim,Tmax_scaling,err,dir,plotScale=True,save=False): # Plot all scalings
     colors = plt.cm.hsv(np.linspace(0,1,len(N)+1)) # Create unique color for each particle
     plt.figure(figsize=(12,10))
     plt.title(r'$T(N,N_{rm})$ Curves of Constant $N$')
@@ -113,10 +113,11 @@ def plotAll(N,Nrm,Tmax_sim,Tmax_scaling,err,plotScale=True,save=False): # Plot a
     plt.grid()
     plt.legend()
     if save:
-        plt.savefig(f'z_Data_1/N = {N}',bbox_inches='tight')
-    plt.show()
+        plt.savefig(f'{dir}/N = {N}',bbox_inches='tight',dpi=600)
+    else:
+        plt.show()
 
-def plotFittingSurface(N_MESH,NRM_MESH,model,avg,err):
+def plotFittingSurface(N_MESH,NRM_MESH,model,avg,err,dir,save=False):
     fig = plt.figure(figsize=(12,10))
     ax = fig.add_subplot(projection='3d')
     surf = ax.plot_surface(N_MESH,NRM_MESH,model,cmap=plt.cm.coolwarm,alpha=0.35,label='Scaling Relation')
@@ -134,24 +135,10 @@ def plotFittingSurface(N_MESH,NRM_MESH,model,avg,err):
     ax.yaxis.labelpad = 10
     ax.zaxis.labelpad = 10
     ax.legend(loc=2,bbox_to_anchor=(0.1,0.85))
-    plt.show()
-
-def plotScalingSurface(R,save=False): # Plot surface of scaling relation as function of N and Nrm
-    N = np.linspace(100,1000,901,dtype='int') # Num particles, (3,1000,998)
-    Nrm = np.linspace(1,198,198,dtype='int') # Number of particles removed
-    X,Y = np.meshgrid(N,Nrm)
-    data = modelFunc(X,Y,R)
-    fig, ax = plt.subplots(subplot_kw={"projection": "3d"},figsize=(12,10))
-    surf = ax.plot_surface(X,Y,data,cmap=plt.cm.rainbow,linewidth=0,antialiased=False)
-    fig.colorbar(surf,shrink=0.75,pad=0.125)
-    ax.set_title('Energy Scaling as a Function of N and Nrm')
-    ax.set_xlabel('N')
-    ax.set_ylabel('Nrm')
-    ax.set_zlabel('Peak Energy (eV)')
     if save:
-        plt.savefig(f'z_Data_1/Energy Scaling Surface',bbox_inches='tight')
-    plt.show()
-    return 0
+        plt.savefig(f'{dir}/Energy Scaling Surface',bbox_inches='tight',dpi=600)
+    else:
+        plt.show()
 
 # ---------- Main ----------
 
@@ -186,5 +173,5 @@ print(f'Fit Parameters: {params}') # Print results
 print(f'Reduced χ2 = {chi2/(N_MESH.shape[0]*N_MESH.shape[1] - freeParams)}')
 model = modelFitFunc(N_MESH,NRM_MESH,R,*params) # Compute fitting surface
 
-plotFittingSurface(N_MESH,NRM_MESH,model,avg,err) # Plot fitting surface
-plotAll(Narr,Nrm,avg,model.T,err,plotScale,save) # Plot curves of constant N of fitting surface
+plotFittingSurface(N_MESH,NRM_MESH,model,avg,err,dir,save) # Plot fitting surface
+plotAll(Narr,Nrm,avg,model.T,err,dir,plotScale,save) # Plot curves of constant N of fitting surface
