@@ -116,8 +116,8 @@ def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle positi
     colors = plt.cm.hsv(np.linspace(0,1,N)) # Create unique color for each particle
     fig = plt.figure(figsize=(12,10),dpi=72+1/4)
     ax = fig.add_subplot(111)
-    ax.set_xlabel('rφ')
-    ax.set_ylabel(r'$rln(\tan{(\frac{\pi}{4} + \frac{θ-\frac{\pi}{2})}{2}))}$')
+    ax.set_xlabel('rφ',fontsize=24)
+    ax.set_ylabel(r'$rln(\tan{(\frac{\pi}{4} + \frac{θ-\frac{\pi}{2})}{2}))}$',fontsize=24)
     ylim = 10e-9
     textPosy = 9.5e-9
     textPosx = 2*np.pi*r*0.75
@@ -132,7 +132,7 @@ def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle positi
             x,y = r*φ,r*np.log(np.tan(np.pi/4 + (θ-np.pi/2)/2))
             scatter = ax.scatter(x,y,c=colors)
             txt = ax.text(textPosx,textPosy,s=f't = {time[i]}') # Display simulation time
-            plt.savefig('z_Data_5/Output Sim/step' + "{:05d}".format(counter+1),bbox_inches='tight') # Save figure
+            plt.savefig('z_Data_5/Output Sim/step' + "{:05d}".format(counter+1),bbox_inches='tight',dpi=300) # Save figure
             scatter.remove() # Remove points
             txt.remove() # Remove text
             counter += 1
