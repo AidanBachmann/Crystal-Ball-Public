@@ -70,7 +70,7 @@ def plotVtFinal(particles,N,data_dir,log=False,save=False,NMC=1): # Plot particl
     colors = plt.cm.hsv(np.linspace(0,1,N)) # Create unique color for each particle
     fig,ax = plt.subplots(1,1,figsize=(12,10))
     ax.set_xlabel(r'Particle Index')
-    ax.set_ylabel(r'$|v|$ (m/s)')
+    ax.set_ylabel(r'$|v|$ (m/s)',fontsize=24)
     ax.set_title(r'Velocity Norm at Final Time')
     ax.grid()
 
@@ -83,7 +83,7 @@ def plotVtFinal(particles,N,data_dir,log=False,save=False,NMC=1): # Plot particl
         ax.set_yscale('log')
         
     if save:
-        plt.savefig(f'{data_dir}/Output Init/N_{N}_Lattice_{NMC}_Vt_Final.png',bbox_inches='tight',format='png')
+        plt.savefig(f'{data_dir}/Output Init/N_{N}_Lattice_{NMC}_Vt_Final.png',bbox_inches='tight',format='png',dpi=600)
     else:
         plt.show()
     plt.close(fig)
@@ -141,7 +141,7 @@ def plotAvgDistHist(particles,N,r,NN,data_dir,save,NMC=1): # Plot histogram of a
     plt.grid()
     
     if save:
-        plt.savefig(f'{data_dir}/Output Init/N_{N}_Lattice_{NMC}_NN_Hist.png',bbox_inches='tight',format='png')
+        plt.savefig(f'{data_dir}/Output Init/N_{N}_Lattice_{NMC}_NN_Hist.png',bbox_inches='tight',format='png',dpi=600)
     else:
         plt.show()
     plt.close(fig)

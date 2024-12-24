@@ -134,7 +134,7 @@ def plotVt(N,p,particleIdx,time,data_dir,log=False,save=False,NMC=1): # Plot vel
     
     ax[1,1].plot(time,vNorm) # Plot velocity space time series 
     ax[1,1].set_xlabel(r'Time (s)')
-    ax[1,1].set_ylabel(r'|v|')
+    ax[1,1].set_ylabel(r'|v| (m/s)',fontsize=24)
     ax[1,1].set_title(r'Velocity Norm Time Series')
     ax[1,1].grid()
       
@@ -168,7 +168,7 @@ def plotVtAll(particles,time,N,data_dir,log=False,save=False,NMC=1): # Plot velo
     ax[1,0].grid()
     
     ax[1,1].set_xlabel(r'Time (s)')
-    ax[1,1].set_ylabel(r'|v|')
+    ax[1,1].set_ylabel(r'|v| (m/s)')
     ax[1,1].set_title(r'Velocity Norm Time Series')
     ax[1,1].grid()
     
