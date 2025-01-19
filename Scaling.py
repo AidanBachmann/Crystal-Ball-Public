@@ -16,6 +16,7 @@ ep = 8.85418782e-12 # Permitivitty of free space
 q = 1.602e-19 # Elementary charge
 Z = 5 # Charge of molecule
 k = (1/(4*np.pi*ep))*pow(Z*q,2) # Coulomb force constant, includes charge
+m = 11*1.67262192e-27 # Mass of the Boron-11 (11 * m_proton)
 
 # ---------- Plotting Options ----------
 # Use LaTeX for rendering
@@ -38,6 +39,9 @@ def r_est(Nrm,N,R): # Length scale estimate correction to d(N)
 
 def r_NN(Nrm,N,R): # Length scale estimate of qNN radius
     return 0.5*np.sqrt( (3*np.sqrt(3))/(2*np.pi) )*(3 + np.sqrt( (4*Nrm - 1)/3 ))*d_N(N,R)
+
+def L(Nrm,N,R,c): # Length scale of closest approach in scaling relation
+    return (1/(c*Nrm))*(1/(3 + np.sqrt(3*(4*Nrm - 1))))*d_N(N,R)
 
 def q_hole(Nrm,Z=Z,q=q): # Hole charge (charge of nuclei directly adjacent to hole)
     return ( 3 + np.sqrt( 3*(4*Nrm-1) ) )*Z*q
@@ -67,6 +71,9 @@ def modelFunc(N,Nrm,R): # Model func with length scale d(N) --> r(N,Nrm) = f(Nrm
 
 def chi2Model(data,err,N,Nrm,R): # Chi^2 of analytical model
     return np.sum(pow((data-modelFunc(N,Nrm,R))/err,2))
+
+def debroglieScale(N,Nrm,R,T,c,h=6.62607015e-34): # Compute ratio of de Broglie length to characteristic length scale L
+    return (h/np.sqrt(2*m*T))*(1/L(Nrm,N,R,c))
 
 # ---------- Plotting and Averaging ----------
 
@@ -141,6 +148,27 @@ def plotFittingSurface(N_MESH,NRM_MESH,model,avg,err,dir,save=False):
     else:
         plt.show()
 
+def plotDeBroglie(N_MESH,NRM_MESH,R,T,c,dir,save=False): 
+    fig = plt.figure(figsize=(12,10))
+    ax = fig.add_subplot(projection='3d')
+    lambda_l = debroglieScale(N_MESH,NRM_MESH,R,T*1.6e-19,c,h=6.62607015e-34)
+    surf = ax.plot_surface(N_MESH,NRM_MESH,lambda_l,cmap=plt.cm.coolwarm,alpha=0.35)
+    surf._facecolors2d = surf._facecolor3d
+    surf._edgecolors2d = surf._edgecolor3d
+    ax.set_xlabel(r'$N$',fontsize=24)
+    ax.set_ylabel(r'$N_{rm}$',fontsize=24)
+    ax.set_zlabel(r'$\frac{\lambda}{L(N,N_{rm})}$')
+    ax.set_title(r'Ratio of de Broglie Wavelength to Distance of Closest Approach')
+    ax.xaxis.labelpad = 10
+    ax.yaxis.labelpad = 10
+    ax.zaxis.labelpad = 15
+    ax.tick_params(axis='z',which='major',pad=8)
+    ax.legend(loc=2,bbox_to_anchor=(0.1,0.85))
+    if save:
+        plt.savefig(f'{dir}/Scaling Data/de Broglie Scale',bbox_inches='tight',dpi=600)
+    else:
+        plt.show()
+
 # ---------- Main ----------
 
 dir = 'z_Data_1' # Data directory
@@ -176,3 +204,4 @@ model = modelFitFunc(N_MESH,NRM_MESH,R,*params) # Compute fitting surface
 
 plotFittingSurface(N_MESH,NRM_MESH,model,avg,err,dir,save) # Plot fitting surface
 plotAll(Narr,Nrm,avg,model.T,err,dir,plotScale,save) # Plot curves of constant N of fitting surface
+plotDeBroglie(N_MESH,NRM_MESH,R,model,params[0],dir,save) # Plot ratio of de Broglie length to virtual distance of closest approach

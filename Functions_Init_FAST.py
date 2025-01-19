@@ -390,3 +390,57 @@ def printAllPos(p,n,N): # Print particle positions for time step n
 def printStateInfo(p,Nt): # Print all computed time steps for particle p
     for i in np.linspace(0,Nt-1,Nt,dtype='int'):
         printState(p,i)
+
+
+
+
+# ---------- Test Functions ----------
+
+# Test how drag coefficient affects lattice structure and average lattice constant
+def drag_coeff_test(N,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log): 
+    print(f'Code started on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}.\n')
+    start = time.time() # Save start time
+    numProcs = np.linspace(1,NMC,NMC,dtype='int')
+    procs = []
+    # instantiating process with arguments
+    for i in numProcs:
+        args_ = (N,Nt,NN,n,particleIdx,k,r,m,nu[i-1],dt,max_dt,C,i,seed,data_dir,write,save,log,)
+        proc = Process(target=initSingle,args=args_)
+        procs.append(proc)
+        proc.start()
+    # complete the processes
+    for proc in procs:
+        proc.join()
+    end = time.time() # Save end time
+    print(f'Code finished in {end - start} seconds on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}.')
+
+def read_state(N,r,path,rInit=25.5e-10,NMC=0): # Read state for simulation
+    # If initialized lattice with N particles, pass N-1 to this function to 
+    # remove the last particle. rInit is the radius used to initialize thie lattice.
+    particles = np.zeros([N,1,3]) # Array to grab particles
+    data = pd.read_csv(path,delimiter=',',engine='python',header=None).to_numpy() # Open CSVs
+    for i in np.linspace(0,N-1,N).astype('int'):
+        x,y,z = data[i,0],data[i,1],data[i,2]
+        θ = np.arccos(z/rInit) # Compute angle of particles
+        φ = np.arctan2(y,x)
+        particles[i,0,0] = r*np.sin(θ)*np.cos(φ) # Save x,y,z
+        particles[i,0,1] = r*np.sin(θ)*np.sin(φ)
+        particles[i,0,2] = r*np.cos(θ)
+    return particles
+
+def analyze_drag_coeff(N,nu,r=25.5e-10,NN=6):
+    path = 'z_Data_1/Lattices'
+    fname = f'N_{N}_lattice_'
+    data = np.zeros([len(nu),2]) # Store lattice constant and standard deviation
+    for i in np.linspace(0,len(nu)-1,len(nu),dtype='int'):
+        particles = read_state(N,r,f'{path}/{fname}{round(nu[i],2)}.txt')
+        sAvg = computeAllAvgDist(particles,N,r,NN)*(1e10) # Get distribution in angstroms
+        data[i,0] = np.average(sAvg)
+        data[i,1] = np.std(sAvg)
+        nu[i] = int(pow(10,i+1))
+        print(nu[i])
+    plt.figure(figsize=(12,10))
+    plt.scatter(nu,data[:,0])
+    plt.errorbar(nu,data[:,0],xerr=None,yerr=data[:,1],ls='none',capsize=5,c='black')
+    plt.xscale('log')
+    plt.show()

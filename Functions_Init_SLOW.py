@@ -86,14 +86,15 @@ def firstTimeStepMercator(particles,N,r,data_dir,NMC=1): # Plot first time step
     plt.savefig(f'{data_dir}/Output Init/N_{N}_Final_Lattice_{NMC}.png',bbox_inches='tight') # Save figure
     plt.close(fig)
     
-def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle positions for all time
+def makePosPlotsMercator(particles,Nt,N,time,r,dir): # Make plots of particle positions for all time
     colors = plt.cm.hsv(np.linspace(0,1,N)) # Create unique color for each particle
     fig = plt.figure(figsize=(12,10)) # Set plot size
     ax = fig.add_subplot(111)
     ax.set_xlabel('rφ')
     ax.set_ylabel(r'$rln(\tan{(\frac{\pi}{4} + \frac{θ-\frac{\pi}{2})}{2}))}$')
     ylim = 4.35e-9
-    textPos = 9e-9
+    textPosy = 9.25e-9
+    textPosx = 2*np.pi*r*0.55
     ax.set_xlim([-0.25e-9,2*np.pi*r*(1+0.025)])
     ax.set_ylim([-ylim,ylim])
     ax.grid()
@@ -102,8 +103,8 @@ def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle positi
         φ = np.arctan2(particles[:,i,1],particles[:,i,0]) + np.pi
         x,y = r*φ,r*np.log(np.tan(np.pi/4 + (θ-np.pi/2)/2))
         scatter = ax.scatter(x,y,c=colors)
-        txt = ax.text(4.75e-9,textPos,s=f't = {time[i]}') # Display simulation time
-        plt.savefig('step' + "{:05d}".format(i+1),bbox_inches='tight') # Save figure
+        txt = ax.text(textPosx,textPosy,s=f't = {time[i]}') # Display simulation time
+        plt.savefig(f'{dir}/Output Init/step' + "{:05d}".format(i+1),bbox_inches='tight') # Save figure
         scatter.remove() # Remove points
         txt.remove() # Remove text
     plt.close(fig)

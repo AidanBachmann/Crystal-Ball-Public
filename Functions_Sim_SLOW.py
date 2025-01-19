@@ -112,15 +112,15 @@ def plotAvgDistHist(particles,N,r,NN,save):
     plt.legend()
     plt.show()
     
-def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle position in (φ,θ) plane
+def makePosPlotsMercator(particles,Nt,N,time,r,dir): # Make plots of particle position in (φ,θ) plane
     colors = plt.cm.hsv(np.linspace(0,1,N)) # Create unique color for each particle
     fig = plt.figure(figsize=(12,10),dpi=72+1/4)
     ax = fig.add_subplot(111)
-    ax.set_xlabel('rφ',fontsize=24)
-    ax.set_ylabel(r'$rln(\tan{(\frac{\pi}{4} + \frac{θ-\frac{\pi}{2})}{2}))}$',fontsize=24)
+    ax.set_xlabel(r'$r\phi$',fontsize=24)
+    ax.set_ylabel(r'$r\ln{(\tan{(\frac{\pi}{4} + \frac{θ-\frac{\pi}{2})}{2}))}}$',fontsize=24)
     ylim = 10e-9
-    textPosy = 9.5e-9
-    textPosx = 2*np.pi*r*0.75
+    textPosy = 9.25e-9
+    textPosx = 2*np.pi*r*0.55
     ax.set_xlim([-0.25e-9,2*np.pi*r*(1+0.025)])
     ax.set_ylim([-ylim,ylim])
     ax.grid()
@@ -132,7 +132,7 @@ def makePosPlotsMercator(particles,Nt,N,time,r): # Make plots of particle positi
             x,y = r*φ,r*np.log(np.tan(np.pi/4 + (θ-np.pi/2)/2))
             scatter = ax.scatter(x,y,c=colors)
             txt = ax.text(textPosx,textPosy,s=f't = {time[i]}') # Display simulation time
-            plt.savefig('z_Data_5/Output Sim/step' + "{:05d}".format(counter+1),bbox_inches='tight',dpi=300) # Save figure
+            plt.savefig(f'{dir}/Output Sim/step' + "{:05d}".format(counter+1),bbox_inches='tight',dpi=300) # Save figure
             scatter.remove() # Remove points
             txt.remove() # Remove text
             counter += 1
@@ -456,7 +456,7 @@ def simSingle(N,Nt,Nrm,k,r,m,dt,C,max_dt,pIdx,lattice,NMC,data_dir,save=True,log
     timeSeries = simulation(simParticles,N,Nt,k,r,m,dt,C,max_dt) # Run simulation
     Tmax = plotEnergyAll(simParticles,Nt,timeSeries,N,Nrm,NMC,r,m,data_dir,log,save) # Energy plots
     if generatePlots:
-        makePosPlotsMercator(simParticles,Nt,N,timeSeries,r)
+        makePosPlotsMercator(simParticles,Nt,N,timeSeries,r,dir=data_dir)
     
 def simMC_Multi(N,Nt,Nrm,k,r,m,dt,C,max_dt,pIdx,lattice,NMC,data_dir,save=True,log=False,generatePlots=False,debug=False): # NMC simulations on NMC processes
     print(f'Code started on {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}.\n')
