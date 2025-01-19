@@ -438,7 +438,6 @@ def analyze_drag_coeff(N,nu,r=25.5e-10,NN=6):
         data[i,0] = np.average(sAvg)
         data[i,1] = np.std(sAvg)
         nu[i] = int(pow(10,i+1))
-        print(nu[i])
     plt.figure(figsize=(12,10))
     plt.scatter(nu,data[:,0])
     plt.errorbar(nu,data[:,0],xerr=None,yerr=data[:,1],ls='none',capsize=5,c='black')
