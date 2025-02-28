@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 # Use LaTeX for rendering
 plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['mathtext.rm'] = 'serif'
-plt.rcParams['font.size'] = 18
+plt.rcParams['font.size'] = 30
 plt.rcParams['legend.fontsize'] = 'large'
 plt.rcParams['figure.titlesize'] = 'medium'
 
@@ -128,8 +128,8 @@ def plot_a(Narr,a,err,dir,save=False): # Plot energy
 
     a *= 1e10 # Scale lengths to angstroms
 
-    ax[0].scatter(Narr,a[:,0],label='Simulation',s=50)
-    ax[0].scatter(Narr,a[:,1],label='Theory',marker='+',c='r',s=100)
+    ax[0].scatter(Narr,a[:,0],label='Simulation',s=100)
+    ax[0].scatter(Narr,a[:,1],label='Theory',marker='+',c='r',s=200)
     ax[0].set_ylim(0,np.max(a[:,0])*(1+0.25))
     ax[0].set_xlabel('Number of Particles')
     ax[0].set_ylabel('Lattice Constant (Å)')
@@ -137,10 +137,10 @@ def plot_a(Narr,a,err,dir,save=False): # Plot energy
     ax[0].legend()
     ax[0].grid()
 
-    ax[1].scatter(Narr,err,s=75)
+    ax[1].scatter(Narr,err,s=150)
     ax[1].set_xlabel('Number of Particles')
     ax[1].set_ylabel('Percent Error')
-    ax[1].set_title('Percent Error Between Theory and Simulation')
+    ax[1].set_title('Percent Error Between\nTheory and Simulation')
     ax[1].grid()
 
     if save:
@@ -159,7 +159,7 @@ NMC = 8 # Specify which Monte-Carlo simulation to grab
 r = 25.5e-10 # Sphere radius to use for initialization
 
 Un,a,err = compute_all_Un(Narr,NMC,data_dir,r) # Compute lattice constants and potential energy
-plot_Un(Narr,Un) # Plot results
+#plot_Un(Narr,Un) # Plot results
 plot_a(Narr,a,err,data_dir,save)
 
 if write:

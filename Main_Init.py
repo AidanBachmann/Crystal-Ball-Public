@@ -1,6 +1,6 @@
 # Description: Main function for initializing lattices.
 
-FAST = False # Flag to use fast version of the code
+FAST = True # Flag to use fast version of the code
 
 if FAST:
     import Functions_Init_FAST as funcs
@@ -40,31 +40,23 @@ save = True # Save plots
 log = False # Plot on log scale
 write = True # Flag to write computed lattice to text file
 runSingle = False # Run a single simulation for a particle seed (certain value of NMC)
-test = False # Run test function, defined in Functions_Init_Fast.py
 
 # ---------- Simulation Loop ----------
-if test: # Run a test function. Function below checks how drag coefficient changes lattice structure.
-    nu = funcs.np.asarray([1e9,1e10,1e11,1e12]) # Array of drag coefficients to test
-    print(f'Running Test for nu = {nu}')
-    funcs.drag_coeff_test(int(500),Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
+
+if runSingle and (len(Narr) == int(1)):
+    print('Initializing single lattice.\n')
+    funcs.initSingle(Narr[0],Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
 else:
-    if runSingle and (len(Narr) == int(1)):
-        print('Initializing single lattice.\n')
-        funcs.initSingle(Narr[0],Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
-    else:
-        print(f'Initializing {NMC} lattices with unique seeds.\n')
-        if NMC == int(1):
-            for N_i in Narr:
-                funcs.initSingle(N_i,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
-        elif NMC > 1:
-            for N_i in Narr:
-                funcs.initMC_Multi(N_i,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
-                seed += NMC+1 # Change seed for next set
+    print(f'Initializing {NMC} lattices with unique seeds.\n')
+    if NMC == int(1):
+        for N_i in Narr:
+            funcs.initSingle(N_i,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
+    elif NMC > 1:
+        for N_i in Narr:
+            funcs.initMC_Multi(N_i,Nt,NN,n,particleIdx,k,r,m,nu,dt,max_dt,C,NMC,seed,data_dir,write,save,log)
+            seed += NMC+1 # Change seed for next set
 
 funcs.plotLatticeConsts(data_dir,NMC,True) # Plot average lattice constants for all lattices
-
-#nu = funcs.np.asarray([1,2,3,4,5,6,7,8,9,10,11]).astype('int')
-#funcs.analyze_drag_coeff(int(500),nu)
 
 # Characterize generated lattices further using Voronoi.py and Thomson.py. These can be used to compare results with other
 # numerical solutions to the Thomson problem. 

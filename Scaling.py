@@ -157,13 +157,12 @@ def plotDeBroglie(N_MESH,NRM_MESH,R,T,c,dir,save=False):
     surf._edgecolors2d = surf._edgecolor3d
     ax.set_xlabel(r'$N$',fontsize=24)
     ax.set_ylabel(r'$N_{rm}$',fontsize=24)
-    ax.set_zlabel(r'$\frac{\lambda}{L(N,N_{rm})}$')
-    ax.set_title(r'Ratio of de Broglie Wavelength to Distance of Closest Approach')
+    ax.set_zlabel(r'$\frac{\lambda(N,N_{rm})}{L(N,N_{rm})}$')
+    ax.set_title(r'$\lambda(N,N_{rm})$/$L(N,N_{rm})$')
     ax.xaxis.labelpad = 10
     ax.yaxis.labelpad = 10
-    ax.zaxis.labelpad = 15
-    ax.tick_params(axis='z',which='major',pad=8)
-    ax.legend(loc=2,bbox_to_anchor=(0.1,0.85))
+    ax.zaxis.labelpad = 35
+    ax.tick_params(axis='z',which='major',pad=15)
     if save:
         plt.savefig(f'{dir}/Scaling Data/de Broglie Scale',bbox_inches='tight',dpi=600)
     else:
@@ -185,7 +184,7 @@ freeParams = 1 # Number of free parameters of the model
 guess = (1) # Initial guess of free parameter for fitter
 
 plotScale = True # Plot scaling relation
-save = False # Save figure
+save = True # Save figure
 
 Narr = np.linspace(Nmin,Nmax,numN+1,dtype='int') # Array to loop over for scanning different values of N
 Nrm = np.linspace(1,Nrd,Nrd,dtype='int') # Number of particles removed
